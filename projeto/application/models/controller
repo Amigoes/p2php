@@ -1,0 +1,32 @@
+ public function form(){
+        $this->load->view('Cadastro_jogo');
+    }
+    
+        
+    public function listar(){
+        $this->load->model("listdao");
+        $data["jogos"] = $this->listdao->listObject("Cadastro_jogo");
+        $this->load->view('listajogo',$data);
+    }
+    public function inserir(){
+        $titulo = $this->input->post("titulo");
+        $desenvolvedora = $this->input->post("desenvolvedora");
+         $plataforma = $this->input->post("plataforma");
+        $lancamento = $this->input->post("lancamento");
+        $estilo = $this->input->post("estilo");
+        $descricao = $this->input->post("descricao");
+        
+         require_once APPPATH."/models/Cadastro_jogo.php";
+         $cadastro = new Cadastro_jogo($titulo, $desenvolvedora,$plataforma, $lancamento, $estilo, $descricao);
+         $this->load->model("insertdao");
+         $this->insertdao->insertObject($cadastro);
+    }    
+    public function editar($id){
+        if($id == NULL){
+            redirect('/');
+        }
+        $this->load->model('cadastro_jogo','cadastro');
+        $query = $this->cadastro->getJogoById($id);
+        $dados['jogos'] = $query;
+        $this->load->view('editajogo', $dados);
+    }
